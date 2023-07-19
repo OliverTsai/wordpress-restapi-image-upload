@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上傳圖片</title>
+</head>
+<body>
+    <h1>上傳圖片</h1>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">上傳</button>
+    <div id="result"></div>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://localhost/wp-json/custom-file-upload/v1/upload', true);
+
+            xhr.onload = function() {
+                const resultDiv = document.getElementById('result');
+                const data = JSON.parse(xhr.responseText);
+
+                if (data.success) {
+                    resultDiv.innerHTML = `<p>圖片上傳成功!ID: ${data.data.id}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<p>Error: ${data.data.message}</p>`;
+                }
+            };
+
+            xhr.onerror = function() {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `<p>Error: 出了問題!</p>`;
+            };
+
+            xhr.send(formData);
+        }
+    </script>
+</body>
+</html>
