@@ -7,6 +7,22 @@
  */
 
 /**
+ * Allow Cross-Origin Resource Sharing (CORS).
+ */
+function custom_file_upload_allow_cors() {
+    header( 'Access-Control-Allow-Origin: *' );
+    header( 'Access-Control-Allow-Methods: GET, POST, OPTIONS' );
+    header( 'Access-Control-Allow-Credentials: true' );
+    header( 'Access-Control-Allow-Headers: Origin, Content-Type, X-Requested-With, Authorization' );
+
+    if ( 'OPTIONS' === $_SERVER['REQUEST_METHOD'] ) {
+        status_header( 200 );
+        exit();
+    }
+}
+add_action( 'init', 'custom_file_upload_allow_cors' );
+
+/**
  * Register the plugin's hooks and filters.
  */
 function custom_file_upload_init() {
